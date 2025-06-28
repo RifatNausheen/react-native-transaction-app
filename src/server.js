@@ -4,14 +4,18 @@ import { sql } from "./config/db.js";
 import ratelimiter from "./middleware/rateLimiter.js";
 import transactionRoute from "./routes/transactionRoute.js";
 import cors from "cors";
+import job from "./config/cron.js";
 const app = express();
-app.use(cors());
 
+app.use(cors());
 app.use(ratelimiter);
 app.use(express.json());
 app.use("/api/transactions", transactionRoute);
+
 dotenv.config();
 const PORT = process.env.PORT || 5001;
+
+if (process.env.NODE_ENV === "production") job.start();
 
 async function initDB() {
   try {
