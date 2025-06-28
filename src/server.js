@@ -17,6 +17,9 @@ const PORT = process.env.PORT || 5001;
 
 if (process.env.NODE_ENV === "production") job.start();
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 async function initDB() {
   try {
     await sql`CREATE TABLE IF NOT EXISTS transaction(
